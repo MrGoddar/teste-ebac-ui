@@ -1,4 +1,5 @@
 /// <reference types="cypress"/>
+const perfil = require('../../fixtures/perfil.json')
 
 describe('Funcionalidade: Login', () => {
 
@@ -35,5 +36,21 @@ describe('Funcionalidade: Login', () => {
 
         cy.get('.woocommerce-error').should('contain', 'Erro: A senha fornecida para o e-mail matheuso54@hotmail.com está incorreta. Perdeu a senha?')
          //cy.get('.woocommerce-error').should('contain', 'Erro: A senha fornecida para o e-mail matheuso54@hotmail.com está incorreta. Perdeu a senha?')
+    });
+    it ('Deve fazer login  com sucesso usando massa de dados', () => {
+        cy.get('#username').type(perfil.usuário)
+        cy.get('#password').type(perfil.senha)
+        cy.get('.woocommerce-form > .button').click()
+        cy.get('.woocommerce-MyAccount-content > :nth-child(2)').should('contain', 'Olá, matheuso54 (não é matheuso54? Sair)')
+        
+    });
+
+    it.only ('Deve fazer login com sucesso usando fixture', () => {
+       cy.fixture('perfil').then((dados) => { 
+           cy.get('#username').type(dados.usuário, {log: false})
+           cy.get('#password').type(dados.senha , { log: false})
+           cy.get('.woocommerce-form > .button').click()
+           cy.get('.woocommerce-MyAccount-content > :nth-child(2)').should('contain', 'Olá, matheuso54 (não é matheuso54? Sair)')
+       }); 
     });
 });
